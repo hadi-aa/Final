@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h1>List of <b>Emails</b></h1></div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>#</th>
+                        <th>DETAIL</th>
+                        <th>STATUS</th>
+                        <th>DATE SENT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ object.task_args }}
+                            </td>
+                            <td>
+                                {{ object.status }}
+                            </td>
+                            <td>
+                                {{ object.date_created|date:'Y/m/d, H:n' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

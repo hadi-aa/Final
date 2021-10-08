@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Main Section -->
+    <main class="projects">
+        <!-- Search Result: DevList -->
+            <main class="singleProject my-md">
+                <div class="container">
+                    {% if organization_list %}
+
+                    {% for organization in organization_list %}
+
+                    <table class="table table-bordered table-striped tab">
+                        <thead class="header text-white">
+                        <tr>
+                            <th class="text-center align-middle"> <h5>ID</h5></th>
+                            <th class="text-center align-middle"><h5>General Information</h5></th>
+                            <th class="text-center align-middle"><h5>Representative Information</h5></th>
+                            <th class="text-center align-middle">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center align-middle">{{ organization.id }}</td>
+                                <td class="text-center align-middle">
+                                    <div class="row">
+                                        <div class="col">
+                                            {% if organization.logo %}
+                                            <img src="{{ organization.logo.url }}" alt="organization logo" style="width:  100px; height: 100px; object-fit: scale-down;">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col">
+                                            <a class="display-6" href="{% url 'analyse:organization' organization.id organization.name %}">{{ organization }}</a>
+                                            <hr>
+                                            <h6>From {{ organization.country.name }}</h6>
+                                            <hr>
+                                            <h6>Number of Employee {{ organization.employees_count }}</h6>
+                                            <hr>
+                                            <h6>Registered
+                                                on: {{ organization.date_registered_jalali|date:'Y/m/d' }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Name: {{ organization.repr_name }}</h6>
+                                            <hr>
+                                            <h6>Email: {{ organization.repr_email }}</h6>
+                                            <hr>
+                                            <h6>No: {{ organization.repr_num }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a class="btn btn--sub btn-sm" href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
+                                    <hr>
+                                    <a class="btn btn--sub" href="{% url 'analyse:edit_organization' organization.id %}">Edit</a>
+                                    <hr>
+                                    <a class="btn btn--sub" href="{%  url 'followup:organizatonquotelist' organization.id %}">Quotes List</a>
+                                    <hr>
+                                    <a class="btn btn--sub" href="{% url 'followup:create_quote' organization.id %}">New Quote </a>
+                                    <hr>
+                                    <a class="btn btn--sub" href="{% url 'followup:new_followup' organization.id%}">New Followup Report</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                    {% else %}
+                        <h3 lang="text-center">There is no organization</h3>
+                    {% endif %}
+
+
+                </div>
+            </main>
+        {#        {% include 'pagination.html' with queryset=projects custom_range=custom_range %}#}
+    </main>
+{% endblock %}

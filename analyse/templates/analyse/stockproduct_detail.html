@@ -1,0 +1,64 @@
+a{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6"><h1>{{ stockproduct }}</h1></div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex float-right col-12">
+                            <a role="button" class="d-flex float-right btn btn-primary"
+                               href="{% url 'analyse:edit_stockproduct' stockproduct.pk %}">Edit</a>
+                            <br>
+                            <a role="button" class="d-flex float-right btn btn-primary"
+                               href="{% url 'analyse:stockproduct_list' %}">List of Stock Products</a>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>General Info</th>
+                        <th>Downstream Product</th>
+                        <th>Registrar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            {{ stockproduct }}
+                        </td>
+                        <td>
+                            <span>{{ stockproduct.description }}</span>
+                        </td>
+                        <td>
+                            <ol class="border rounded">Price: {{ stockproduct.price }}</ol>
+                            <hr>
+                            <ol class="border rounded">Quantity: {{ stockproduct.quantity }}</ol>
+                        </td>
+                        <td>
+                            {% for product in stockproduct.downstream_product.all %}
+                                <a class="btn btn--sub" href="{% url 'analyse:product' product.pk%}">{{ product }}</a>
+                                {% if stockproduct.downstream_product.all|length == 1 %}
+                                <br>
+                                    {% else %}
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td><a>{{ stockproduct.user|capfirst }}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

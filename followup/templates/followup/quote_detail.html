@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}
+    Quote Number {{ quote.id }}
+{% endblock %}
+{% block content %}
+    {% load followup_extras %}
+    <div class="container">
+        {% for message in messages %}
+            <strong class="tag tag--lg bg-info">{{ message }}</strong>
+        {% endfor %}
+        <h4 class="text-center"><b>{{ quote }}</b></h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-6">
+                        <div class="col-sm-6">
+                            <h6 class="mb-3">To:</h6>
+                            <div><strong>{{ quote.organization }}</strong></div>
+                            <div>{{ quote.organization.repr_name }}</div>
+                            <div>{{ quote.organization.repr_num }}</div>
+                            <div>{{ quote.organization.repr_email }}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="mb-3">Details:</h6>
+                            <div>Quote Id: <strong>{{ quote.id }}</strong></div>
+                            <div>Date
+                                Registered: {{ quote.date_registered|date:"Y M d"|upper }}</div>
+                            <div>Registrar: {{ quote.user|upper }}</div>
+                            <div>Status: {{ quote.status }}</div>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="center">#</th>
+                                <th>Item</th>
+                                <th class="center">QUANTITY</th>
+                                <th class="center">UNIT</th>
+                                <th class="right">DISCOUNT</th>
+                                <th class="right">TOTAL</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for quote_item in quote.quoteitem_set.all %}
+                                <tr>
+                                    <td class="center">{{ forloop.counter }}</td>
+                                    <td class="left">{{ quote_item.product }}</td>
+                                    <td class="center">{{ quote_item.quantity }}</td>
+                                    <td class="center">{{ quote_item.product.price }}</td>
+                                    <td class="right">{{ quote_item.discount }}%</td>
+                                    <td class="right">{{ quote_item.get_quoteitem_total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6 display-5">
+                            Grand Total: <b class="fw-bold">{{ quote.get_grand_total }}</b>
+                        </div>
+
+                        <div class="col-3 d-flex float-right">
+                            <a class="btn btn-sm btn-success"
+                               href="{% url 'followup:quote_email' quote.pk %}"
+                               data-abc="true">Send Email </a>
+                        </div>
+                        <div class="col-3 d-flex float-right">
+                            <a class="btn btn-sm btn-success"
+                               href="{% url 'followup:quote_pdf' quote.pk %}"
+                               data-abc="true">Download Pdf </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

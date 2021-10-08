@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!-- Main Section -->
+    <main class="home">
+        <section class="devlist">
+            <div class="container">
+                <div class="grid grid--three">
+                    <div class="column card">
+                        <div class="dev">
+                            <div class="card__body">
+                                <div class="dev__profile">
+                                    <img class="avatar avatar--md"
+                                         src="{% static 'img/org_icon.png' %}" alt="image"/>
+                                    <div class="dev__meta">
+                                        <h3>Organizations</h3>
+                                    </div>
+                                </div>
+                                <p class="dev__info">
+                                    All you need to know about organizations are here.
+                                </p>
+                                <hr>
+                                <br>
+                                <div>
+                                    <div class="row"><a href="{%  url 'analyse:new_organization' %}" class="btn btn--sub">Add New Organization</a></div>
+                                    <br>
+                                    <div class="row"><a href="{%  url 'analyse:organization_list' %}" class="btn  btn--sub">List of Organizations</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column card">
+                        <div class="dev">
+                            <div class="card__body">
+                                <div class="dev__profile">
+                                    <img class="avatar avatar--md"
+                                         src="{% static 'img/prod_icon.png' %}" alt="image"/>
+                                    <div class="dev__meta">
+                                        <h3>Products</h3>
+                                    </div>
+                                </div>
+                                <p class="dev__info">
+                                    All you need to know about products are here.
+                                </p>
+                                <hr>
+                                <br>
+                                <div>
+                                    <div class="row"><a href="{%  url 'analyse:new_product' %}" class="btn btn--sub">Add New Product</a></div>
+                                    <br>
+                                    <div class="row"><a href="{%  url 'analyse:new_stockproduct' %}" class="btn btn--sub">Add New Stock
+                                    product</a></div>
+                                    <br>
+                                    <div class="row"><a href="{%  url 'analyse:product_list' %}" class="btn btn--sub">List of Products</a></div>
+                                    <br>
+                                    <div class="row"><a href="{%  url 'analyse:stockproduct_list' %}" class="btn btn--sub">List of Stock Products</a></div>
+                                    <br>
+                                    <div class="row"><a href="" class="btn btn--sub">Test TBD</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column card">
+                        <div class="dev">
+                            <div class="card__body">
+                                <div class="dev__profile">
+                                    <img class="avatar avatar--md"
+                                         src="{% static 'img/report_icon.png' %}" alt="report"/>
+                                    <div class="dev__meta">
+                                        <h3>Followup Reports</h3>
+                                    </div>
+                                </div>
+                                <p class="dev__info"> All you need to know about reports are here.</p>
+                                <hr>
+                                <br>
+                                <div>
+                                    <div class="row"><a href="{% url 'followup:quote_list' %}" class="btn btn--sub">List of Quotes</a></div>
+                                    <br>
+                                    <div class="row"><a href="{% url 'followup:followup_list' %}" class="btn btn--sub text-center">Followup Reports List</a></div>
+                                    <br>
+                                    <div class="row"><a href="{% url 'followup:email_list' %}" class="btn btn--sub text-center">Email Info List</a></div>
+                                    <br>
+                                    <div class="row"><a href="http://127.0.0.1:8000/api/v1/list/" class="btn btn--sub text-center">API Detail</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+

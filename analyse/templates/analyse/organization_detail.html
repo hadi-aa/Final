@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {#    organization informtion section#}
+    <main class="singleProject my-md">
+        <div class="container">
+            <table class="table table-bordered table-striped tab">
+                <thead class="header text-white">
+                <tr>
+                    <th><h5>ID</h5></th>
+                    <th class="text-center align-middle"><h5>General Information</h5></th>
+                    <th class="text-center align-middle"><h5>Representative Information</h5></th>
+                    <th class="text-center align-middle">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-center align-middle">{{ organization.id }}</td>
+                    <td class="text-center align-middle">
+                        <div class="row">
+                            <div class="col">
+                                {% if organization.logo %}
+                                <img src="{{ organization.logo.url }}" alt="organization logo"
+                                     style="width:  100px; height: 100px; object-fit: scale-down;">
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <h4 class="display-5">{{ organization }}</h4>
+                                <hr>
+                                <h6>From {{ organization.country.name }}</h6>
+                                <hr>
+                                <h6>Number of Employees: {{ organization.employees_count }}</h6>
+                                <hr>
+                                <h6>Registered
+                                    on: {{ organization.date_registered_jalali|date:'Y/m/d' }}</h6>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Name: {{ organization.repr_name }}</h6>
+                                <hr>
+                                <h6>Email: {{ organization.repr_email }}</h6>
+                                <hr>
+                                <h6>No: {{ organization.repr_num }}</h6>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                        <a class="btn btn--sub btn-sm" href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
+                        <hr>
+                        <a class="btn btn--sub" href="{% url 'analyse:edit_organization' organization.id %}">Edit</a>
+                        <hr>
+                        <a class="btn btn--sub" href="{% url 'followup:new_followup' organization.id %}">New Followup Report</a>
+                        <hr>
+                        <a class="btn btn--sub" href="{% url 'followup:organizatonquotelist' organization.id %}">Quote List</a>
+                        <hr>
+                        <a class="btn btn--sub" href="{% url 'followup:create_quote' organization.id %}">New Quote</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {#            product section#}
+    <main class="singleProject my-md">
+        <div class="container">
+            <table class="table table-bordered table-striped tab">
+                <thead class="header text-white">
+                <tr>
+                    <th class="text-center align-middle"><h5>Organization Products</h5></th>
+                    <th class="text-center align-middle"><h5>Our Related Products</h5></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-center align-middle">
+                        <div class="row">
+                            <div class="col">
+                                <ol class="">
+                                    {% for product in organization.organization_products.all %}
+                                        <a href="{% url 'analyse:product' product.pk %}">
+                                            <h4>
+                                                {{ product }}
+                                            </h4>
+                                        </a>
+                                        <br>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                        <div class="row">
+                            <div class="col">
+                                {% for product in stock_products %}
+                                    <a class="btn btn--sub"
+                                       href="{% url 'analyse:stockproduct' product.id %}">{{ product }}</a>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    {#    followup reports#}
+    <main class="singleProject my-md">
+        <div class="container">
+            <table class="table table-bordered table-striped tab">
+                <thead class="header text-white">
+                <tr>
+                    <th><h5>#</h5></th>
+                    <th class="text-center align-middle"><h5>Report</h5></th>
+                    <th class="text-center align-middle"><h5>Date</h5></th>
+                    <th class="text-center align-middle">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if followup_reports %}
+                    {% for report in followup_reports %}
+                        <tr>
+                            <td class="text-center align-middle">{{ forloop.counter }}</td>
+                            <td class="">{{ report.report }}</td>
+                            <td class="text-center align-middle">
+                                {{ report.date_registered_jalali|date:'Y/m/d   h:i' }}
+                            </td>
+                            <td class="text-center align-middle">
+                                <a class="btn btn--sub" href="{% url 'followup:followupreport' report.id %}">View Report</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <td colspan="4" class="text-center"><h5> There is no report. </h5></td>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+{% endblock %}
+
+
+

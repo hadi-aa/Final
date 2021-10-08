@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% load followup_extras %}
+    <div class="container ">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {% if flag %}
+                                <h2>List of Quote of
+                                    <a href="{% url 'analyse:organization' quote_list.0.organization.id quote_list.0.organization.name %}">
+                                        {{ quote_list.0.organization }}</a>
+                                </h2>
+                            {% else %}
+                                <h2>List of All Quotes </h2>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>General Info</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for quote in object_list %}
+                        <tr style="border-bottom:1pt solid black;">
+                            <td>
+                                ID: {{ quote.pk }}
+                                <hr>
+                                {% if not flag %}
+                                    Organization: <b><a
+                                        href="{% url 'followup:organizatonquotelist' quote.organization.pk %}">{{ quote.organization }}</a></b>
+                                    <hr>
+                                {% endif %}
+                                Registrar: {{ quote.user|capfirst }}
+                                <hr>
+                                Date of Registration : {{ quote.date_registered_jalali|date:'Y/m/d H:i' }}
+                                <hr>
+                                Status: {{ quote.status }}
+                                <hr>
+                                <div class=" font-weight-bolder">
+                                    Grand Total: {{ quote.get_grand_total }}
+                                </div>
+                            </td>
+                            <td>
+                                {% for quote_item in quote.quoteitem_set.all %}
+                                    <div class="p-4 border rounded text-center ">
+                                        <div class="display-5"><a href="{% url 'analyse:stockproduct' quote_item.product.pk %}">{{ quote_item.product }}</a></div>
+                                        <hr>
+                                        Price:
+                                        <div class="bg-info"><strong>{{ quote_item.product.price }}</strong></div>
+                                        <hr>
+                                        Quantity:
+                                        <div class="bg-light"><strong>{{ quote_item.quantity }}</strong></div>
+                                        <hr>
+                                        Discount:
+                                        <div class="bg-primary"><strong>{{ quote_item.discount }} %</strong></div>
+                                        <hr>
+                                        Total: {% multiply quote_item.quantity quote_item.product.price %}
+                                    </div>
+                                    <br>
+                                {% endfor %}
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn--sub rounded" href="{% url 'followup:quote' quote.pk %}">View
+                                    Quote</a>
+                                <hr>
+                                <a class="btn btn--sub rounded"
+                                   href="{% url 'followup:create_quote' quote.organization.pk %}">New Quote</a>
+                                <hr>
+                                <a class="btn btn--sub btn-sm" href="{% url 'followup:quote_pdf' quote.pk %}"
+                                   data-abc="true">Download PDF</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <span class="step-links align-items-center">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {# pagination section#}
+    {# end of pagination section#}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load static %}
+
+<!-- Header Section -->
+<header class="header">
+    <div class="container container--narrow">
+        <a href="{% url 'home' %}" class="header__logo"><b>CRM SYSTEM</b></a>
+        <nav class="header__nav">
+            <input type="checkbox" id="responsive-menu" />
+            <label for="responsive-menu" class="toggle-menu">
+                <span>Menu</span>
+                <div class="toggle-menu__lines"></div>
+            </label>
+            <ul class="header__menu">
+                {% if request.user.is_authenticated %}
+                <li class="header__menuItem"><a href="{% url 'analyse:organization_list' %}">Organizations</a></li>
+                <li class="header__menuItem"><a href="{% url 'analyse:new_organization' %}">New Organization</a></li>
+                <li class="header__menuItem"><a href="{% url 'followup:quote_list' %}">Quotes</a></li>
+                <li class="header__menuItem"><a href="{% url 'home' %}" class="btn btn--main">{{ request.user|capfirst }}</a></li>
+                <li class="header__menuItem"><a href="{% url 'user:logout' %}" class="btn btn--sub">Logout</a></li>
+                {% else %}
+                <li class="header__menuItem"><a href="{% url 'user:login' %}" class="btn btn--sub">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>

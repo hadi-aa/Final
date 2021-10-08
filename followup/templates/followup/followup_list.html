@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h1>List of <b>Followup Reports</b></h1></div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Report</th>
+                        <th>Organization</th>
+                        <th>Date</th>
+                        <th>Registrar</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{{ object }}</td>
+                            <td>
+                                {{ object.report }}
+                            </td>
+                            <td class="text-center">
+                                {{ object.organization }}
+                            </td>
+                            <td>
+                                {{ object.date_registered_jalali|date:'Y/m/d' }}
+                            </td>
+                            <td class="text-center">
+                                {{ object.user|capfirst }}
+                            </td>
+                            <td class="text-center align-middle">
+                                <a class="btn btn--sub" href="{% url 'followup:followupreport' object.id %}">
+                                    View Report
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

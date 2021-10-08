@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container ">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6"><h1>{{ organization }}</h1></div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex float-right col-12">
+                            <a role="button" class="d-flex float-right btn btn--sub"
+                               href="{% url 'analyse:edit_product' product.pk %}">Edit</a>
+                            <br>
+                            <a role="button" class="d-flex float-right btn btn--sub"
+                               href="{% url 'analyse:product_list' %}">List of Products</a>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Date of Reg.</th>
+                        <th>Registrar</th>
+                        <th>Our Related Products</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            {{ product }}
+                        </td>
+                        <td>
+                            <span>{{ product.description }}</span>
+                        </td>
+                        <td>
+                            <a href="">{{ product.date_registered_jalali|date:'Y/m/d' }}</a>
+                        </td>
+                        <td><a>{{ product.user|capfirst }}</a>
+                        </td>
+                        <td class="text-center">{% for product in stock_products %}
+                            <a class="btn btn--sub" href="{% url 'analyse:stockproduct' product.id %}">{{ product }}</a>
+                            <hr>
+                        {% endfor %}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

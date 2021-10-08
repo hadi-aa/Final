@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Main Section -->
+    <main class="messagePage my-xl">
+        <div class="content-box">
+            <div class="message">
+                <h2 class="message__subject"> Followup Report Number {{ object.id }}</h2>
+                <h4 class="message__author">By {{ object.user|capfirst }}</h4>
+                <h4 class="message__author">For {{ object.organization }}</h4>
+                <p class="message__date">{{ object.date_registered_jalali|date:'Y/m/d' }}</p>
+                <div class="message__body">{{ object.report }}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

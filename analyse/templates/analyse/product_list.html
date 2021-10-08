@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="table">
+            <div class="">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h1>List of <b>Products</b></h1></div>
+                        <btn class="col-sm-4">
+                            <a type="button" class="btn btn--sub add-new" href="{% url 'analyse:new_product' %}">
+                                Add New Product
+                            </a>
+                        </btn>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Registrar</th>
+                        <th>Date of Reg.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td><a href="{% url 'analyse:product' object.pk %}">{{ object }}</a></td>
+                            <td>
+                                {{ object.description }}
+                            </td>
+                            <td>
+                                {{ object.date_registered_jalali|date:'Y/m/d' }}
+                            </td>
+                            <td>
+                                {{ object.user|capfirst }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

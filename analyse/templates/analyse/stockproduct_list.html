@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container ">
+        <div class="table table-striped">
+            <div>
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h1>List of <b>Stock Products</b></h1></div>
+                        <btn     class="col-sm-4">
+                            <a type="button" class="btn btn--sub add-new" href="{% url 'analyse:new_stockproduct' %}"> Add New Stock Products
+                            </a>
+                        </btn>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>General Info</th>
+                        <th>Downstream Products</th>
+                        <th>Registrar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for stock_product in object_list %}
+                    <tr>
+                        <td><a href="{% url 'analyse:stockproduct' stock_product.pk %}">{{ stock_product }}</a></td>
+                        <td>
+                            <span>{{ stock_product.description|truncatewords:20 }}</span>
+                        </td>
+                        <td>
+                            <ol class="border rounded">Price: {{ stock_product.price }}</ol>
+                            <hr>
+                            <ol class="border rounded">Quantity: {{ stock_product.quantity }}</ol>
+                        </td>
+                        <td class="text-center">
+                            {% for product in stock_product.downstream_product.all %}
+                            <a class="btn btn--sub" href="{% url 'analyse:product' product.pk %}">{{ product }}</a>
+                            <hr>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ stock_product.user|capfirst }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <!-- Main Section -->
+    <main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+                <h4 class="buton">New Quote For "{{ organization }}"</h4>
+                <hr>
+                <div class="form-group">
+                    <label for="item">Select an Item</label>
+                    <select class="dropdown" id="select">
+                        <option value="Select an Item" data-hidden="true">Select an Item</option>
+                        {% for object in stock_products %}
+                            <option class={{ object.quantity }} value="{{ object }}"
+                                    id={{ object.id }}  objectId="{{ object.price }}">{{ object }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn--sub add_new">Add Item</button>
+                </div>
+                <br>
+                <form class="form">
+                    <div>
+                        <table id='table' class='table table-bordered'>
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Discount</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="item_row"></tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <button type="button" class="confirm btn btn--sub ">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    {% block script %}
+        <script>
+            $(document).ready(function () {
+
+                function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+
+                    }
+                }
+                return cookieValue;
+            };
+                var csrfToken = getCookie('csrftoken');
+
+                function csrfSafeMethod(method) {
+                return ['GET', 'OPTIONS', 'HEAD', 'TRACE'].includes(method);
+            }
+
+                $.ajaxSetup({
+                beforeSend: function (xhr, setting) {
+                    if (!csrfSafeMethod(setting.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    }
+                }
+            });
+
+                var item;
+                var itemPrice;
+                var itemQuantity;
+                var itemId;
+                $('.add_new').on('click', function (event) {
+                    item = $('.dropdown').val()
+                    itemId = $('.dropdown option:selected').attr('id');
+                    itemQuantity = $('.dropdown option:selected').attr('class');
+                    itemPrice = $('.dropdown option:selected').attr('objectId');
+                    var row = "<tr class='table_row' id='"+itemId+"'>" +
+                        "<td>" + item + "</td>" +
+                        "<td>" + itemPrice + "</td>" +
+                        "<td><input name='quantity' type='number' style='width: 100px' max='" + itemQuantity + "' min='1' required value='1'></td>" +
+                        "<td><input name='discount' type='number' style='width: 100px' max='100' min='0' step='0.01' maxlength='5' required value='1'></td>" +
+                        "<td><button type='button' class='btn btn--sub delete_button' onclick='window.DeleteRow(" + itemId + ")' id='id-" + itemId + "'>Delete</button></td>" +
+                        "</tr>";
+                    if (item !== 'Select an Item') {
+                        console.log(item)
+                        $(".dropdown option:selected").hide();
+                        $('select').val('Select an Item')
+                        $('.item_row').append(row)
+                    }
+                });
+                window.DeleteRow = function DeleteRow(itemId) {
+                    var options = $('select').children()
+                    console.log(itemId)
+                    for (const variable of options) {
+                        if (variable.id == itemId) {
+                            {#console.log(variable.id)#}
+                            $("#select option[id=" + itemId + "]").show()
+                            break
+                        }
+                        var row = document.getElementById('id-' + itemId)
+                        $(row).closest('tr').remove()
+                    }
+                }
+
+                $('.confirm').on('click', function (event){
+                    console.log(csrfToken)
+                    let quote = {};
+                    $('tr.table_row').each(function () {
+                        let quoteitem = {};
+                        let productId = $(this)[0].id
+                        quoteitem['quantity'] = $(this).children().find('input[name=quantity]').val()
+                        quoteitem['discount'] = $(this).children().find('input[name=discount]').val()
+                        quoteitem['product'] = $(this)[0].id
+                        quote[productId] = quoteitem;
+                    })
+                    console.log(quote)
+                    $.ajax({
+                    url: "{% url 'followup:create_quote' organization.pk %}",
+                    method: 'post',
+                    data: {'quote': JSON.stringify(quote),},
+                    error: function (result) {
+                        alert('invalid data entry! check your inputs');
+                    },
+                    success: function () {
+                        window.location.href = "{% url "followup:quote_list"  %}";
+                    },
+                })
+                })
+            });
+        </script>
+    {% endblock %}
+{% endblock %}
