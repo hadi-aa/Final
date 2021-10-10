@@ -146,12 +146,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TRACK_STARTED = True
 
 # email settings
-ADMINS = [('hadi', 'email address')]
+ADMINS = [('hadi', '*')]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'email'
-EMAIL_HOST_PASSWORD = 'email password'
+EMAIL_HOST_USER = '*'
+EMAIL_HOST_PASSWORD = '*'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'email address'
+DEFAULT_FROM_EMAIL = '*'

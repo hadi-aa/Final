@@ -7,8 +7,10 @@
             <div class="formWrapper">
                 <h4 class="buton">New Quote For "{{ organization }}"</h4>
                 <hr>
+
+                {# organization related stock product dropdown section #}
                 <div class="form-group">
-                    <label for="item">Select an Item</label>
+                    <label for="select">Select an Item</label>
                     <select class="dropdown" id="select">
                         <option value="Select an Item" data-hidden="true">Select an Item</option>
                         {% for object in stock_products %}
@@ -18,6 +20,8 @@
                     </select>
                     <button class="btn btn--sub add_new">Add Item</button>
                 </div>
+                {# organization related stock product dropdown section #}
+
                 <br>
                 <form class="form">
                     <div>
@@ -45,40 +49,45 @@
     {% block script %}
         <script>
             $(document).ready(function () {
-
+                {# AJAX csrf section #}
                 function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
 
+                        }
                     }
-                }
-                return cookieValue;
-            };
+                    return cookieValue;
+                };
                 var csrfToken = getCookie('csrftoken');
 
                 function csrfSafeMethod(method) {
-                return ['GET', 'OPTIONS', 'HEAD', 'TRACE'].includes(method);
-            }
+                    return ['GET', 'OPTIONS', 'HEAD', 'TRACE'].includes(method);
+                }
 
                 $.ajaxSetup({
-                beforeSend: function (xhr, setting) {
-                    if (!csrfSafeMethod(setting.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                    beforeSend: function (xhr, setting) {
+                        if (!csrfSafeMethod(setting.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                        }
                     }
-                }
-            });
+                });
+                {# end of AJAX csrf section #}
 
                 var item;
                 var itemPrice;
                 var itemQuantity;
                 var itemId;
+
+                {# after clicking on Add Item button a row containg selected product is appended to the table #}
+                {# at the same time the selected option will disappear from dropdown menu #}
+                {# add item button section #}
                 $('.add_new').on('click', function (event) {
                     item = $('.dropdown').val()
                     itemId = $('.dropdown option:selected').attr('id');
@@ -111,7 +120,10 @@
                         $(row).closest('tr').remove()
                     }
                 }
+                {# add item button section #}
 
+                {#after clickong on confirm button the selectred item data will be send by ajax #}
+                {# confirm button section #}
                 $('.confirm').on('click', function (event){
                     console.log(csrfToken)
                     let quote = {};
@@ -125,17 +137,16 @@
                     })
                     console.log(quote)
                     $.ajax({
-                    url: "{% url 'followup:create_quote' organization.pk %}",
-                    method: 'post',
-                    data: {'quote': JSON.stringify(quote),},
-                    error: function (result) {
-                        alert('invalid data entry! check your inputs');
-                    },
-                    success: function () {
-                        window.location.href = "{% url "followup:quote_list"  %}";
-                    },
+                        url: "{% url 'followup:create_quote' organization.pk %}",
+                        method: 'post',
+                        data: {'quote': JSON.stringify(quote),},
+                        error: function (result) {
+                            alert('invalid data entry! check your inputs');
+                        },
+                        success: function () {window.location.href = "{% url "followup:quote_list"  %}";},
+                    })
                 })
-                })
+                {#end of confirm button section #}
             });
         </script>
     {% endblock %}

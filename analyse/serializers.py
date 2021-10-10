@@ -19,7 +19,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     organization_products = ProductSerializer
-    user = serializers.StringRelatedField()
+    # user = serializers.StringRelatedField()
 
     class Meta:
         model = Organization
@@ -33,9 +33,8 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
             'repr_name',
             'repr_num',
             'repr_email',
-            'user',
         ]
         read_only_fields = [
             'pk',
-            'user',
+                # 'user',
         ]

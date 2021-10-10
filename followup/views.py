@@ -10,6 +10,7 @@ from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django_celery_results.models import TaskResult
+from rest_framework import status
 from xhtml2pdf import pisa
 
 from analyse.models import StockProduct, Organization
@@ -74,7 +75,7 @@ def create_quote(request, pk):
             '''2- the product in item must be one of stock product related to organization products'''
             '''3- the quantity of items should not exceed the quantity in stock'''
             if quoteitemform.is_valid() and product in stock_products and product.quoteitem_quantity_checker(quantity):
-                quoteitem = QuoteItem.objects.create(quote_id=0, product_id=product.pk, quantity=quantity,
+                quoteitem = QuoteItem.objects.create(quote_id=quote.pk, product_id=product.pk, quantity=quantity,
                                                      discount=discount, )
             else:
 
@@ -82,7 +83,8 @@ def create_quote(request, pk):
                 quote.delete()
 
                 return JsonResponse({'success': False}, status=400)
-        return JsonResponse({'success': True, 'quote_id': quote.pk}, status=200)
+        # return JsonResponse({'success': True, 'quote_id': quote.pk}, status=200)
+        return redirect('followup:quote', pk=int(quote.pk))
     context = {
         'stock_products': set(stock_products),
         'organization': Organization.objects.get(pk=pk),
