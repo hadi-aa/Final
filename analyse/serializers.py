@@ -17,9 +17,9 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
-    organization_products = ProductSerializer
-    # user = serializers.StringRelatedField()
+class OrganizationSerializer(serializers.ModelSerializer):
+    organization_products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
+    logo = serializers.ImageField(default='default.jpg')
 
     class Meta:
         model = Organization
@@ -36,5 +36,4 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
         ]
         read_only_fields = [
             'pk',
-                # 'user',
         ]
