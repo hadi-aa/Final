@@ -2,8 +2,8 @@
 
 <!-- Header Section -->
 <header class="header">
-    <div class="container container--narrow">
-        <a href="{% url 'home' %}" class="header__logo"><b>CRM SYSTEM</b></a>
+    <div class="container">
+        <a href="{% url 'home' %}" class="display-6"><b>Customer Relationship Management System</b></a>
         <nav class="header__nav">
             <input type="checkbox" id="responsive-menu" />
             <label for="responsive-menu" class="toggle-menu">
@@ -13,7 +13,7 @@
             <ul class="header__menu">
                 {% if request.user.is_authenticated %}
                 <li class="header__menuItem"><a href="{% url 'analyse:organization_list' %}">Organizations</a></li>
-                <li class="header__menuItem"><a href="{% url 'analyse:new_organization' %}">New Organization</a></li>
+                <li class="header__menuItem"><a href="{% url 'analyse:create_organization' %}">New Organization</a></li>
                 <li class="header__menuItem"><a href="{% url 'followup:quote_list' %}">Quotes</a></li>
                 <li class="header__menuItem"><a href="{% url 'home' %}" class="btn btn--main">{{ request.user|capfirst }}</a></li>
                 <li class="header__menuItem"><a href="{% url 'user:logout' %}" class="btn btn--sub">Logout</a></li>

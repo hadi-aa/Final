@@ -1,5 +1,3 @@
-from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from analyse import permissions as analyse_permissions
 
@@ -16,7 +14,7 @@ class OrganizationViewSet(ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user = self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class ProductViewSet(ModelViewSet):

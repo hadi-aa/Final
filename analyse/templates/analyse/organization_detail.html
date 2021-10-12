@@ -3,15 +3,15 @@
 {% block content %}
 
     {#    organization informtion section#}
-    <main class="singleProject my-md">
+    <main>
         <div class="container">
-            <table class="table table-bordered table-striped tab">
+            <table class="table table-bordered table-striped">
                 <thead class="header text-white">
                 <tr>
-                    <th><h5>ID</h5></th>
-                    <th class="text-center align-middle"><h5>General Information</h5></th>
-                    <th class="text-center align-middle"><h5>Representative Information</h5></th>
-                    <th class="text-center align-middle">Actions</th>
+                    <th>ID</th>
+                    <th class="text-center">General Information</th>
+                    <th class="text-center">Representative Information</th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,11 +22,11 @@
                             <div class="col">
                                 {% if organization.logo %}
                                 <img src="{{ organization.logo.url }}" alt="organization logo"
-                                     style="width:  100px; height: 100px; object-fit: scale-down;">
+                                     style="width:  150px; height: 150px; object-fit: contain;">
                                 {% endif %}
                             </div>
                             <div class="col">
-                                <h4 class="display-5">{{ organization }}</h4>
+                                <b class="display-5">{{ organization }}</b>
                                 <hr>
                                 <h6>From {{ organization.country.name }}</h6>
                                 <hr>
@@ -48,16 +48,16 @@
                             </div>
                         </div>
                     </td>
-                    <td class="text-center align-middle">
-                        <a class="btn btn--sub btn-sm" href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
-                        <hr>
+                    <td class="text-center">
                         <a class="btn btn--sub" href="{% url 'analyse:edit_organization' organization.id %}">Edit</a>
                         <hr>
-                        <a class="btn btn--sub" href="{% url 'followup:new_followup' organization.id %}">New Followup Report</a>
+                        <a class="btn btn--sub btn-sm" href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
                         <hr>
-                        <a class="btn btn--sub" href="{% url 'followup:organizatonquotelist' organization.id %}">Quote List</a>
+                        <a class="btn btn--sub" href="{% url 'followup:create_followupreport' organization.id %}">New Followup Report</a>
                         <hr>
                         <a class="btn btn--sub" href="{% url 'followup:create_quote' organization.id %}">New Quote</a>
+                        <hr>
+                        <a class="btn btn--sub" href="{% url 'followup:organizatonquote_list' organization.id %}">Quote List</a>
                     </td>
                 </tr>
                 </tbody>
@@ -71,8 +71,8 @@
             <table class="table table-bordered table-striped tab">
                 <thead class="header text-white">
                 <tr>
-                    <th class="text-center align-middle"><h5>Organization Products</h5></th>
-                    <th class="text-center align-middle"><h5>Our Related Products</h5></th>
+                    <th class="text-center align-middle">Organization Products</th>
+                    <th class="text-center align-middle">Our Related Products</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,14 +111,14 @@
     </main>
 
     {#    followup reports#}
-    <main class="singleProject my-md">
+    <main>
         <div class="container">
-            <table class="table table-bordered table-striped tab">
+            <table class="table table-bordered">
                 <thead class="header text-white">
                 <tr>
-                    <th><h5>#</h5></th>
-                    <th class="text-center align-middle"><h5>Report</h5></th>
-                    <th class="text-center align-middle"><h5>Date</h5></th>
+                    <th>#</th>
+                    <th class="text-center align-middle">Report</th>
+                    <th class="text-center align-middle">Date</th>
                     <th class="text-center align-middle">Actions</th>
                 </tr>
                 </thead>

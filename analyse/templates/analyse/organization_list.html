@@ -4,33 +4,35 @@
     <!-- Main Section -->
     <main class="projects">
         <!-- Search Result: DevList -->
-            <main class="singleProject my-md">
-                <div class="container">
-                    {% if organization_list %}
+        <main class="singleProject my-md">
+            <div class="container">
+                {% if organization_list %}
 
                     {% for organization in organization_list %}
 
-                    <table class="table table-bordered table-striped tab">
-                        <thead class="header text-white">
-                        <tr>
-                            <th class="text-center align-middle"> <h5>ID</h5></th>
-                            <th class="text-center align-middle"><h5>General Information</h5></th>
-                            <th class="text-center align-middle"><h5>Representative Information</h5></th>
-                            <th class="text-center align-middle">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                        <table class="table table-bordered table-striped tab">
+                            <thead class="header text-white">
+                            <tr>
+                                <th class="text-center align-middle">ID</th>
+                                <th class="text-center align-middle">General Information</th>
+                                <th class="text-center align-middle">Representative Information</th>
+                                <th class="text-center align-middle">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             <tr>
                                 <td class="text-center align-middle">{{ organization.id }}</td>
                                 <td class="text-center align-middle">
                                     <div class="row">
                                         <div class="col">
                                             {% if organization.logo %}
-                                            <img src="{{ organization.logo.url }}" alt="organization logo" style="width:  100px; height: 100px; object-fit: scale-down;">
+                                                <img src="{{ organization.logo.url }}" alt="organization logo"
+                                                     style="width:  150px; height: 150px; object-fit: contain;">
                                             {% endif %}
                                         </div>
                                         <div class="col">
-                                            <a class="display-6" href="{% url 'analyse:organization' organization.id organization.name %}">{{ organization }}</a>
+                                            <a class="display-6"
+                                               href="{% url 'analyse:organization' organization.id organization.name %}">{{ organization }}</a>
                                             <hr>
                                             <h6>From {{ organization.country.name }}</h6>
                                             <hr>
@@ -53,27 +55,48 @@
                                     </div>
                                 </td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn--sub btn-sm" href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
+                                    <a class="btn btn--sub"
+                                       href="{% url 'analyse:edit_organization' organization.id %}">Edit</a>
                                     <hr>
-                                    <a class="btn btn--sub" href="{% url 'analyse:edit_organization' organization.id %}">Edit</a>
+                                    <a class="btn btn--sub btn-sm"
+                                       href="{% url 'analyse:delete_organization' organization.id %}">Delete</a>
                                     <hr>
-                                    <a class="btn btn--sub" href="{%  url 'followup:organizatonquotelist' organization.id %}">Quotes List</a>
+                                    <a class="btn btn--sub"
+                                       href="{% url 'followup:create_followupreport' organization.id %}">New Followup
+                                        Report</a>
                                     <hr>
-                                    <a class="btn btn--sub" href="{% url 'followup:create_quote' organization.id %}">New Quote </a>
+                                    <a class="btn btn--sub" href="{% url 'followup:create_quote' organization.id %}">New
+                                        Quote </a>
                                     <hr>
-                                    <a class="btn btn--sub" href="{% url 'followup:new_followup' organization.id%}">New Followup Report</a>
+                                    <a class="btn btn--sub"
+                                       href="{% url 'followup:organizatonquote_list' organization.id %}">Quotes List</a>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     {% endfor %}
-                    {% else %}
-                        <h3 lang="text-center">There is no organization</h3>
-                    {% endif %}
+                {% else %}
+                    <h3 lang="text-center">There is no organization</h3>
+                {% endif %}
 
 
+                <div class="pagination justify-content-center">
+                    <span class="step-links align-items-center">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
                 </div>
-            </main>
-        {#        {% include 'pagination.html' with queryset=projects custom_range=custom_range %}#}
+            </div>
+        </main>
+
     </main>
 {% endblock %}

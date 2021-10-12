@@ -6,7 +6,7 @@ class IsUserorReadOnly(permissions.BasePermission):
     custom permission to only allow creator of organization to mak change in organization information
     """
 
-    def hhh(self, request, view, obj):
+    def user_status_ckecker(self, request, view, obj):
         if request.user.is_anonymous:
             return False
         if obj.user == request.user:

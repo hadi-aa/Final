@@ -14,16 +14,17 @@ router.register('analyse/product', api_views.ProductViewSet, basename='product')
 
 
 urlpatterns = [
+                  path('', analyse_views.Home.as_view(), name='home'),
+                  path('home/', analyse_views.Home.as_view(), name='home'),
                   path('admin/', admin.site.urls),
                   path('analyse/', include("analyse.urls")),
                   path('followup/', include("followup.urls")),
                   path('user/', include("user.urls")),
-                  path('', analyse_views.Home.as_view(), name='home'),
-                  path('home/', analyse_views.Home.as_view(), name='home'),
-                  path('error/', analyse_views.Error.as_view(), name='error'),
                   path('api-auth/', include('rest_framework.urls')),
                   path('api/v1/list/', include(router.urls)),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

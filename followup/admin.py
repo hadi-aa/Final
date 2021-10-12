@@ -19,14 +19,13 @@ class QuoteAdmin(admin.ModelAdmin):
 @admin.register(models.QuoteItem)
 class QuoteItemAdmin(admin.ModelAdmin):
     list_display = (
-        'pk',
+        # 'pk',
         'quote',
         'product',
         'quantity',
         'discount',
     )
 
-    list_display_links = ['pk']
 
     list_filter = (
         'quote',

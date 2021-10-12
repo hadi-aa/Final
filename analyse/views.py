@@ -116,6 +116,7 @@ class OrganizationDetail(LoginRequiredMixin, DetailView):
 
 class OrganizationList(LoginRequiredMixin, ListView):
     model = Organization
+    paginate_by = 4
 
     def get_queryset(self):
         queryset = Organization.objects.filter(user__pk=self.request.user.pk)

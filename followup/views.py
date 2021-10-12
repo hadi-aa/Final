@@ -10,7 +10,6 @@ from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django_celery_results.models import TaskResult
-from rest_framework import status
 from xhtml2pdf import pisa
 
 from analyse.models import StockProduct, Organization
@@ -28,6 +27,10 @@ class OrganizationQuoteList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Quote.objects.filter(organization_id=self.kwargs.get('pk'), user__pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        self.extra_context['organization'] = Organization.objects.get(pk=self.kwargs.get('pk'))
+        return super().get_context_data(**kwargs)
 
 
 class QuoteList(LoginRequiredMixin, ListView):
@@ -52,7 +55,7 @@ class QuoteDetail(LoginRequiredMixin, DetailView):
 def create_quote(request, pk):
     organization_products = Organization.objects.get(pk=pk).organization_products.all()
 
-    ''' stock products related to organizations products '''
+    ''' stock products related to organizations products that are available (quantity greater than or equal to 1) '''
     stock_products = StockProduct.objects.filter(downstream_product__in=organization_products, quantity__gte=1)
     '''                                                  '''
 
@@ -61,7 +64,8 @@ def create_quote(request, pk):
 
         ajax_quote = json.loads(request.POST.get('quote'))
 
-        ''' a quote object is created. if information related to items are valid this quotes deemed as quote releted to items'''
+        '''a quote object is created. if information related to items are valid this quotes deemed as quote related 
+        to items '''
         quote = Quote.objects.create(organization_id=pk, status='CREATED', user_id=request.user.pk, )
 
         for item in ajax_quote:
@@ -79,7 +83,8 @@ def create_quote(request, pk):
                                                      discount=discount, )
             else:
 
-                '''if item information are invalid none of these item will be saved and previously created quote object wil be destroyed'''
+                '''if item information are invalid none of these item will be saved and previously created quote 
+                object wil be destroyed '''
                 quote.delete()
 
                 return JsonResponse({'success': False}, status=400)
@@ -175,6 +180,6 @@ def send_quote_email(request, pk):
     return redirect('followup:quote', pk=pk)
 
 
-class EmailTaslResultList(LoginRequiredMixin, ListView):
+class EmailTaskResultList(LoginRequiredMixin, ListView):
     model = TaskResult
     template_name = 'followup/email_list.html'

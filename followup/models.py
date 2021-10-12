@@ -37,7 +37,8 @@ class Quote(models.Model):
     def quote_items(self):
         quote_item_list = QuoteItem.objects.filter(quote_id=self.id)
         return [
-            f'{str(quote_item.id)} {str(quote_item.product)} (Price: {quote_item.product.price} | Quantity: {quote_item.quantity} | Discount: {quote_item.discount} %)\n'
+            f'{str(quote_item.id)} {str(quote_item.product)} (Price: {quote_item.product.price} |' \
+            f' Quantity: {quote_item.quantity} | Discount: {quote_item.discount} %)\n '
             for quote_item in quote_item_list]
 
 
@@ -52,7 +53,15 @@ class QuoteItem(models.Model):
     discount = models.DecimalField(default=0, decimal_places=2, max_digits=5,
                                    validators=[MinValueValidator(Decimal('0.00')), MaxValueValidator(100)])
 
+    class Meta:
+        ordering = ['quote']
+        verbose_name_plural = 'Quote Items'
+
+    def __str__(self):
+        return f'Quote Item number {self.id}'.title()
+
     '''this method calculates each item total price after tax and discount'''
+
     def get_quoteitem_total(self):
         tax = 9
         self.product.price -= self.product.price * (self.discount / 100)
@@ -78,4 +87,3 @@ class Followup(models.Model):
 
     def __str__(self):
         return f'follow up report number {self.id}'.title()
-

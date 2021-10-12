@@ -10,8 +10,8 @@
                         <div class="col-sm-6">
                             {% if flag %}
                                 <h2>List of Quote of
-                                    <a href="{% url 'analyse:organization' quote_list.0.organization.id quote_list.0.organization.name %}">
-                                        {{ quote_list.0.organization }}</a>
+                                    <a href="{% url 'analyse:organization' organization.id organization.name %}">
+                                        {{ organization }}</a>
                                 </h2>
                             {% else %}
                                 <h2>List of All Quotes </h2>
@@ -29,6 +29,7 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if quote_list|length > 0 %}
                     {% for quote in object_list %}
                         <tr style="border-bottom:1pt solid black;">
                             <td>
@@ -36,7 +37,7 @@
                                 <hr>
                                 {% if not flag %}
                                     Organization: <b><a
-                                        href="{% url 'followup:organizatonquotelist' quote.organization.pk %}">{{ quote.organization }}</a></b>
+                                        href="{% url 'followup:organizatonquote_list' quote.organization.pk %}">{{ quote.organization }}</a></b>
                                     <hr>
                                 {% endif %}
                                 Registrar: {{ quote.user|capfirst }}
@@ -80,9 +81,14 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    {% else %}
+                        <tr style="border-bottom:1pt solid black;">
+                        <td class="text-center display-6" colspan="3">There is no quotes.</td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
-                <div class="pagination">
+                <div class="pagination justify-content-center">
                     <span class="step-links align-items-center">
                         {% if page_obj.has_previous %}
                             <a href="?page=1">&laquo; first</a>
@@ -99,8 +105,5 @@
                 </div>
             </div>
         </div>
-
     </div>
-    {# pagination section#}
-    {# end of pagination section#}
 {% endblock %}

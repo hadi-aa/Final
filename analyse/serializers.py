@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from analyse.models import Organization, Product
 
 
@@ -37,3 +36,5 @@ class OrganizationSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'pk',
         ]
+
+
