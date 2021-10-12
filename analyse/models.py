@@ -35,7 +35,7 @@ class Organization(models.Model):
     country = CountryField()
     logo = models.ImageField(null=True, blank=True, default='default.jpg')
     employees_count = models.PositiveIntegerField(default=1, verbose_name='number of employees')
-    organization_products = models.ManyToManyField(Product, through='OrganizationProduct', blank=True)
+    organization_products = models.ManyToManyField(Product, blank=True)
     repr_name = models.CharField(max_length=200, verbose_name='name of representative')
     repr_num = models.CharField(validators=[phone_regex], max_length=11, unique=True,
                                 verbose_name='phone number of representative')
@@ -62,15 +62,7 @@ class Organization(models.Model):
         return [organization_product for organization_product in self.organization_products.all()]
 
 
-'''Organization Product table'''
-
-
-class OrganizationProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.product.name
+'''This models specifies the detail of the Stock Product'''
 
 
 class StockProduct(models.Model):

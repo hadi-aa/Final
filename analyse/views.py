@@ -106,7 +106,7 @@ class OrganizationDetail(LoginRequiredMixin, DetailView):
         '''                                '''
 
         context = super().get_context_data(**kwargs)
-        context['stock_products'] = stock_products
+        context['stock_products'] = set(stock_products)
         context['followup_reports'] = followup_reports
         return context
 
