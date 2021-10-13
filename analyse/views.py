@@ -90,15 +90,15 @@ class OrganizationDetail(LoginRequiredMixin, DetailView):
     model = Organization
 
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.user.id != self.request.user.id:
+        obj = self.get_object()
+        if obj.user.id != self.request.user.id:
             return redirect('error')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        self.object = self.get_object()
+        obj = self.get_object()
         '''stock product related to organization product'''
-        stock_products = StockProduct.objects.filter(downstream_product__organization=self.object)
+        stock_products = StockProduct.objects.filter(downstream_product__organization=obj)
         '''                                           '''
 
         ''' organization followup reports '''
@@ -133,9 +133,9 @@ class DeleteOrganization(DeleteView):
     success_url = reverse_lazy('analyse:organization_list')
 
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        obj = self.get_object()
         # only the user who registered organization can delete it
-        if self.object.user.id != self.request.user.id:
+        if obj.user.id != self.request.user.id:
             return redirect('error')
         return super().get(request, *args, **kwargs)
 
@@ -194,10 +194,10 @@ class ProductDetail(LoginRequiredMixin, DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
-        self.object = self.get_object()
+        obj = self.get_object()
 
         ''' stock product related to product '''
-        stock_products = StockProduct.objects.filter(downstream_product__id=self.object.id)
+        stock_products = StockProduct.objects.filter(downstream_product__id=obj.id)
         '''                                  '''
 
         context = super().get_context_data(**kwargs)
