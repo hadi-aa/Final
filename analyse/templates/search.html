@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <!-- Main Section -->
+    <main class="formPage my-xl">
+        <div class="content-box">
+            <div class="formWrapper">
+
+
+                <form class="form" action="" method="POST">
+                    {% csrf_token %}
+                    <strong>
+                        Select one of the options:
+                    </strong>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="organization"
+                               value="organization" checked>
+                        <label class="form-check-label" for="organization">
+                            Organization
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="product" value="product">
+                        <label class="form-check-label" for="product">
+                            Product
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="stock_product"
+                               value="stock_product   ">
+                        <label class="form-check-label" for="stock_product">
+                            Stock Product
+                        </label>
+                    </div>
+
+                    <input value='' id="input_field" type="search" name="query" maxlength="200" required="">
+
+                    <hr>
+
+                    <input name="search" class="btn btn--sub search" type="button" value="Confirm"/>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    {% block script %}
+        <script>
+            $(document).ready(function () {
+                {# AJAX csrf section #}
+
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+
+                        }
+                    }
+                    return cookieValue;
+                };
+                var csrfToken = getCookie('csrftoken');
+
+                function csrfSafeMethod(method) {
+                    return ['GET', 'OPTIONS', 'HEAD', 'TRACE'].includes(method);
+                }
+
+                $.ajaxSetup({
+                    beforeSend: function (xhr, setting) {
+                        if (!csrfSafeMethod(setting.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                        }
+                    }
+                });
+                {# end of AJAX csrf section #}
+                let query;
+                const confirmButton = document.querySelector('.search');
+                confirmButton.addEventListener('click', function (event) {
+                    query = document.getElementById("input_field").value;
+                    console.log(typeof query)
+                    $.ajax({
+                        url: "{% url 'search' %}",
+                        method: 'post',
+                        data: {'query': query},
+                        {#error: function (result) {#}
+                        {#    alert('invalid data entry! check your inputs');},#}
+                        {#success: function () {#}
+                        {#    window.location.href = "{% url "followup:quote_list"  %}";},#}
+                    })
+                });
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

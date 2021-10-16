@@ -16,6 +16,7 @@ router.register('analyse/product', api_views.ProductViewSet, basename='product')
 urlpatterns = [
                   path('', analyse_views.Home.as_view(), name='home'),
                   path('home/', analyse_views.Home.as_view(), name='home'),
+                  path('search/', analyse_views.search, name='search'),
                   path('admin/', admin.site.urls),
                   path('analyse/', include("analyse.urls")),
                   path('followup/', include("followup.urls")),

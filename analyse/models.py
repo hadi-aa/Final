@@ -24,7 +24,7 @@ class Product(models.Model):
         verbose_name_plural = 'products'
 
     def __str__(self):
-        return self.name.title()
+        return self.name
 
 
 '''This models specifies the detail of the Organization'''

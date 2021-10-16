@@ -52,6 +52,23 @@ class QuoteDetail(LoginRequiredMixin, DetailView):
         return super().get(request, *args, **kwargs)
 
 
+class CreateQuote(LoginRequiredMixin, CreateView):
+    model = Quote
+    field = []
+
+    def get_context_data(self, **kwargs):
+        """Insert the form into the context dict."""
+        organization= Organization.objects.get(pk=self.kwargs['pk'])
+        organization_products = Organization.objects.get(pk=self.kwargs['pk']).organization_products.all()
+        stock_products = StockProduct.objects.filter(downstream_product__in=organization_products, quantity__gte=1)
+        kwargs['organization']= organization
+        kwargs['stock_products']= stock_products
+        return super().get_context_data(**kwargs)
+
+# {'initial': {}, 'prefix': None, 'data': <QueryDict: {'csrfmiddlewaretoken': ['E9HaNRAfyWO5MdcbgJE10q6ScygV15swGPeS5LRO5wlviC8LaEUEcl6XfHyLhCy6'], 'name': ['gjriogerogerno'], 'country': ['AZ'], 'employees_count': ['1'], 'organization_products': ['2', '4', '1'], 'repr_name': ['Hosseini'], 'repr_email': ['Hosseini@Pertoshimipars.ir'], 'repr_num': ['09163400011']}>, 'files': <MultiValueDict: {'logo': [<InMemoryUploadedFile: Agrium_logo.png (image/png)>]}>}
+
+
+
 def create_quote(request, pk):
     organization_products = Organization.objects.get(pk=pk).organization_products.all()
 
@@ -63,7 +80,7 @@ def create_quote(request, pk):
     if request.method == 'POST' and len(json.loads(request.POST.get('quote'))) > 0:
 
         ajax_quote = json.loads(request.POST.get('quote'))
-
+        print(ajax_quote)
         '''a quote object is created. if information related to items are valid this quotes deemed as quote related 
         to items '''
         quote = Quote.objects.create(organization_id=pk, status='CREATED', user_id=request.user.pk, )
@@ -126,6 +143,7 @@ class CreateFollowupReport(LoginRequiredMixin, CreateView):
                             kwargs={'pk': self.object.organization.pk, 'title': self.object.organization.name})
 
 
+
 class FollowupReport(LoginRequiredMixin, DetailView):
     model = Followup
 
@@ -134,6 +152,8 @@ class FollowupReport(LoginRequiredMixin, DetailView):
         if self.object.user.id != self.request.user.id:
             return redirect('error')
         return super().get(request, *args, **kwargs)
+
+
 
 
 class FollowupReportList(LoginRequiredMixin, ListView):
