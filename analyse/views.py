@@ -1,12 +1,12 @@
 import json
 
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponse
 
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views import View
 
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, TemplateView, DeleteView
 
@@ -18,30 +18,6 @@ from .models import Product, Organization, StockProduct
 
 class Home(TemplateView):
     template_name = 'home.html'
-
-
-# ''' ''' TODO
-
-
-class Search(TemplateView):
-    template_name = 'search.html'
-
-    def post(self, request, *args, **kwargs):
-
-        if self.request.method == 'POST':
-            print(self.request.POST)
-            a = self.get_context_data(**kwargs)
-            print(a)
-        return JsonResponse({'1':'1'})
-
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
-
-def search(request): #TODO
-    if request.method == 'POST':
-        a = request.POST['query']
-    return render(request, 'search.html')
 
 
 '''error page view'''
@@ -67,8 +43,6 @@ class CreateOrganization(LoginRequiredMixin, CreateView):
         'repr_num',
         'logo',
     )
-
-
 
     def form_valid(self, form):
         form.instance.user_id = self.request.user.pk
@@ -152,6 +126,22 @@ class OrganizationList(LoginRequiredMixin, ListView):
         queryset = Organization.objects.filter(user__pk=self.request.user.pk)
         """Returns user-specific organization"""
         return queryset
+
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('query')
+        query_set = Organization.objects.filter(name__iexact=query)
+        query_result = {}
+        if len(query_set) > 0:
+            for query in query_set:
+                query_result[str(query.id)] = query.name
+                print(query_result)
+            # print(query_set)
+            # print('////')
+            # print(len(query_set))
+            return JsonResponse({'success': True, 'result':query_result}, status=200)
+        else:
+            print('0')
+        return super().get(request, *args, **kwargs)
 
 
 '''Delete an organization'''

@@ -5,6 +5,25 @@
     <main class="projects">
         <!-- Search Result: DevList -->
         <main class="singleProject my-md">
+
+            <div class="container">
+                <div class="text-center">
+                    <h2>Search Organization</h2>
+                </div>
+                <div class="hero-section__search">
+                    <div class="form">
+                        <div class="form__field">
+                            <label for="formInput#search"></label>
+                            <input class="input input--text" id="formInput#search" type="text" name="text">
+                        </div>
+                        <input class="btn btn--sub btn--lg search" type="button" value="Search">
+                    </div>
+                    <div class="form__field">
+                        <div id="query_result"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="container">
                 {% if organization_list %}
 
@@ -99,4 +118,31 @@
         </main>
 
     </main>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+                let query;
+                const confirmButton = document.querySelector('.search');
+                confirmButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    query = document.getElementById("formInput#search").value;
+                    {#console.log(query)#}
+                    $.ajax({
+                        url: "{% url 'analyse:organization_list' %}",
+                        method: 'GET',
+                        data: {'query': query},
+                        success: function (result) {
+                            console.log(result);
+                            const resultId = result['result'];
+                            const queryResultDiv = document.getElementById('query_result');
+                            const queryResultInnerElement = document.createElement('strong')
+                            queryResultInnerElement.innerHTML = `${resultId}`
+                            queryResultDiv.appendChild(queryResultInnerElement)
+                        }
+                });
+                });
+            });
+    </script>
 {% endblock %}
