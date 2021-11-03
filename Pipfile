@@ -43,6 +43,3 @@ PyJWT = "==1.7.1"
 PyPDF2 = "==1.26.0"
 
 [dev-packages]
-
-[requires]
-python_version = "3.6"
