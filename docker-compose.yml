@@ -1,6 +1,6 @@
 version: '3'
 volumes:
-  finaldb_01:
+  finaldb:
 services:
   database:
     image: "postgres:10-alpine"
@@ -10,10 +10,10 @@ services:
       POSTGRES_USER: hadi
       POSTGRES_PASSWORD: 123456
       PGPASSWORD: 123456
-      POSTGRES_DB: final_01
-      PGDATA: /final_01
+      POSTGRES_DB: final
+      PGDATA: /final
     volumes:
-      - finaldb_01:/final_01
+      - finaldb:/final
   cache:
     image: "memcached:alpine"
     ports:

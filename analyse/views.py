@@ -1,11 +1,8 @@
-import json
-
-
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponse
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, TemplateView, DeleteView
@@ -25,6 +22,10 @@ class Home(TemplateView):
 
 class Error(TemplateView):
     template_name = 'error.html'
+
+    def get(self, request, *args, **kwargs):
+        print(self.request.__dict__['COOKIES'])
+        return super().get(request, *args, **kwargs)
 
 
 '''************* Organization related views *************'''
@@ -93,6 +94,9 @@ class EditOrganization(LoginRequiredMixin, UpdateView):
 class OrganizationDetail(LoginRequiredMixin, DetailView):
     model = Organization
 
+    def get_object(self, queryset=None):
+        return super().get_object(queryset)
+
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
         if obj.user.id != self.request.user.id:
@@ -127,7 +131,8 @@ class OrganizationList(LoginRequiredMixin, ListView):
         """Returns user-specific organization"""
         return queryset
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):   #TODO search section
+        print(self.request.session.__dict__)
         query = self.request.GET.get('query')
         query_set = Organization.objects.filter(name__iexact=query)
         query_result = {}
@@ -141,13 +146,14 @@ class OrganizationList(LoginRequiredMixin, ListView):
             return JsonResponse({'success': True, 'result':query_result}, status=200)
         else:
             print('0')
+
         return super().get(request, *args, **kwargs)
 
 
 '''Delete an organization'''
 
 
-class DeleteOrganization(DeleteView):
+class DeleteOrganization(LoginRequiredMixin, DeleteView):
     model = Organization
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('analyse:organization_list')

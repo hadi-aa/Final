@@ -94,10 +94,6 @@
                             </tbody>
                         </table>
                     {% endfor %}
-                {% else %}
-                    <h3 lang="text-center">There is no organization</h3>
-                {% endif %}
-
 
                 <div class="pagination justify-content-center">
                     <span class="step-links align-items-center">
@@ -114,6 +110,9 @@
                         {% endif %}
                     </span>
                 </div>
+                {% else %}
+                    <h3 lang="text-center">There is no organization</h3>
+                {% endif %}
             </div>
         </main>
 
